@@ -1,3 +1,4 @@
+import ua.hillel.homework7.calculators.*;
 import ua.hillel.homework7.shapes.*;
 
 // Press ⇧ twice to open the Search Everywhere dialog and type `show whitespaces`,
@@ -54,6 +55,91 @@ public class Main {
         Part 2
         реалізувати сімейство калькуляторів (Простий, Фінансовий, Бухгалтерський) Інженерний, Програмований)
         всі вони повинні вміти виконувати базові операції(+,-.*,/ ) плюс свої специфічні функції;
+
+        Simple: +,-.*,/
+        Accountant: %
+        Financial: USD exchange rate
+        Engineer: sin
+        Programmin: memory operations (read, set, clear, add a value)
          */
+
+        System.out.println("");
+        System.out.println("");
+        System.out.println("PART II");
+        System.out.println("");
+        SimpleCalculator[] calcs = new SimpleCalculator[5];
+
+        calcs[0] = new SimpleCalculator();
+        calcs[1] = new AccCalculator();
+        calcs[2] = new FinCalculator();
+        calcs[3] = new EngCalculator();
+        calcs[4] = new ProgCalculator();
+
+        for (SimpleCalculator calc : calcs) {
+            System.out.println("Calculator: " + calc.getClass().getSimpleName());
+            System.out.println("Add 2 and 3 = " + calc.add(2, 3));
+            System.out.println("Sub 2 and 3 = " + calc.substract(2, 3));
+            System.out.println("Mult 2 and 3 = " + calc.multiply(2, 3));
+            System.out.println("Reread last result " + calc.getLastResult());
+            System.out.println("Div 2 and 3 = " + calc.divide(2, 3));
+            System.out.println("Reread last result " + calc.getLastResult());
+            switch (calc.getClass().getSimpleName()) {
+                case "AccCalculator":
+                    // %
+                    // Using getLastResult() - too complex for test purposes
+                    AccCalculator accCalculator = (AccCalculator) calc;
+                    accCalculator.percent(200, 20);
+                    System.out.println("20 percents of 200 = " + accCalculator.getLastResult());
+
+                    break;
+                case "FinCalculator":
+                    // getNBURate(currency)
+                    FinCalculator finCalculator = (FinCalculator) calc;
+
+                    // EUR - not supported
+                    try {
+                        finCalculator.getNBURate("EUR");
+                    } catch (IllegalArgumentException e) {
+                        System.out.println("AHA! No way to get EUR rate. And last result is not changed: " + finCalculator.getLastResult());
+                    }
+
+                    finCalculator.getNBURate("USD");
+                    System.out.println("NBU USD exchange rate: " + finCalculator.getLastResult());
+                    System.out.println("Last result: " + finCalculator.getLastResult());
+
+                    break;
+
+                case "EngCalculator":
+                    // sin
+                    EngCalculator engCalculator = (EngCalculator) calc;
+                    engCalculator.sinus(45);
+                    System.out.println("Sin(45) = " + engCalculator.getLastResult());
+
+                    break;
+
+                case "ProgCalculator":
+                    // memory operations (read, set, clear, add a value)
+                    ProgCalculator progCalculator = (ProgCalculator) calc;
+                    System.out.println("Current value on screen: " + progCalculator.getLastResult());
+                    System.out.println("Initial memory value: " + progCalculator.memoryRead());
+                    progCalculator.add(3, 4);
+                    progCalculator.memorySet();
+                    System.out.println("Should be 7: " + progCalculator.memoryRead());
+                    progCalculator.memoryAdd(3);
+                    System.out.println("Should be 10: " + progCalculator.memoryRead());
+                    progCalculator.memoryClear();
+                    System.out.println("Should be 0: " + progCalculator.memoryRead());
+
+                    break;
+
+                default:
+                    System.out.println("Are you simple calculator? Check: " + calc.getClass().getSimpleName());
+                    break;
+
+
+            }
+
+            System.out.println("=======================");
+        }
     }
 }
